@@ -4,7 +4,10 @@ const { createPost, updatePost, deletePost, likePost, getPost, timelinePost } = 
 // post routs
 
 router.post("/", createPost);
-router.get("/", getPost);
 router.put("/:id", updatePost)
+router.delete("/:id", deletePost);
+router.put("/:id/like", likePost);
+router.get("/:id", getPost);
+router.get("/timeline/all", timelinePost);
 
 module.exports = router
