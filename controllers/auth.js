@@ -1,5 +1,6 @@
 const User = require('../models/User')
 const bcrypt = require('bcrypt');
+const { sign } = require('jsonwebtoken')
 
 
 //register
@@ -18,7 +19,9 @@ const createUser = async (req, res) => {
 
         // save user 
         const user = await newUser.save();
-        res.status(200).json(user);
+        // generating jwt token when user is created
+        const accessToken = sign({ id: user._id }, process.env.SECRET_KEY, { expiresIn: "24hrs" });
+        res.status(200).json({ user, "message": "User Created Successfully", accessToken });
 
     } catch (err) {
         res.status(500).json({ err: err.message })
@@ -34,7 +37,9 @@ const loginUser = async (req, res) => {
         !user && res.status(404).json({ err: "User Not Found" });
         const validPassword = await bcrypt.compare(req.body.password, user.password)
         !validPassword && res.status(400).json({ msg: "Invalid Password" });
-        res.status(200).json(user)
+        // generating jwt token for login
+        const accessToken = sign({ id: user._id }, process.env.SECRET_KEY, { expiresIn: "24hrs" });
+        res.status(200).json({user,accessToken})
     } catch (err) {
         res.status(500).json({ err: err.message })
     }
