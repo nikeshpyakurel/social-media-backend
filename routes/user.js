@@ -4,7 +4,7 @@ const { updateUser, deleteUser, getSingleUser, followUser, unfollowUser } = requ
 // user routes
 router.put("/:id", updateUser);
 router.delete("/:id", deleteUser);
-router.get("/:id", getSingleUser);
+router.get("/", getSingleUser);
 router.put("/:id/follow", followUser);
 router.put("/:id/unfollow", unfollowUser);
 
