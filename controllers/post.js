@@ -48,7 +48,7 @@ const likePost = async (req, res) => {
             res.status(200).json({ msg: "The Post has been liked" })
         }
         else {
-            await post.userId({ $pull: { likes: req.body.userId } })
+            await post.updateOne({ $pull: { likes: req.body.userId } })
             res.status(200).json({ msg: "The Post has been disliked" })
         }
     } catch (err) {
@@ -72,7 +72,7 @@ const timelinePost = async (req, res) => {
                 return Post.find({ userId: friendId })
             })
         )
-        res.status(200).json(userPost.concat(...friendPost))
+        res.status(200).json(userPost.concat(...friendPost).reverse())
     } catch (err) {
         res.status(500).json({ err: err.message })
     }
@@ -83,7 +83,7 @@ const userPost = async (req, res) => {
     try {
         const user = await User.findOne({ username: req.params.username })
         const posts = await Post.find({ userId: user._id });
-        res.status(200).json(posts)
+        res.status(200).json(posts.reverse())
     } catch (err) {
         res.status(500).json({ err: err.message })
     }
